@@ -12,7 +12,10 @@ test/unit/coverage
 *.ntvs*
 *.njsproj
 *.sln
+
 ISSUE_TEMPLATE.md
 CONTRIBUTING.md
 CODE_OF_CONDUCT.md
 CHANGELOG.md
+
+.env

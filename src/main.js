@@ -17,6 +17,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App.vue'
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 // LightBootstrap plugin
 import LightBootstrap from './light-bootstrap-main'
 
@@ -34,7 +37,7 @@ const router = new VueRouter({
   linkActiveClass: 'nav-item active',
   scrollBehavior: (to) => {
     if (to.hash) {
-      return {selector: to.hash}
+      return { selector: to.hash }
     } else {
       return { x: 0, y: 0 }
     }

@@ -100,6 +100,7 @@ export default {
   },
   computed: {
     sidebarStyle() {
+      console.log(process.env);
       return {
         backgroundImage: `url(${this.backgroundImage})`,
       };
