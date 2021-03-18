@@ -4,6 +4,9 @@ import { dispatches } from "../data/data";
 
 Vue.use(Vuex);
 
+const helperFunctions = {
+
+}
 
 export default new Vuex.Store({
     state: {
@@ -16,54 +19,81 @@ export default new Vuex.Store({
             return state.dispatches;
         },
 
-        getDispatchesCount(state) {
+        dispatchesCount(state) {
             return state.dispatches.length;
         },
 
-        getTotalCostPaidDispatched(state) {
+        paidDispatchesCount(state) {
+            let paidDispatches = state.dispatches.filter(dispatch => dispatch.type === "paid");
+            return paidDispatches.length;
+        },
+
+        labelDispatchesCount(state) {
+            let labelDispatches = state.dispatches.filter(dispatch => dispatch.type === "label");
+            return labelDispatches.length;
+        },
+
+        errorPaidDispatchesCount(state) {
+            let errorPaid = state.dispatches.filter(dispatch => dispatch.type === "errorPaid");
+            return errorPaid.length;
+        },
+
+        errorLabelDispatchesCount(state) {
+            let errorLabel = state.dispatches.filter(dispatch => dispatch.type === "errorLabel");
+            return errorLabel.length;
+        },
+
+        paidTotalCost(state) {
             return state.dispatches.reduce((total, dispatch) => {
-                if (dispatch.type != "errorPaid") {
-                    total + dispatch.cost;
-                }
+                dispatch.type === "paid" ? total += dispatch.cost : total += 0
+                return total;
             }, 0);
         },
 
-        getPaidDispatchesCount(state) {
-            let paidDispatches = state.dispatches.map(dispatch => dispatch.type === "paid");
-            return paidDispatches.length;
+        labelTotalCost(state) {
+            return state.dispatches.reduce((total, dispatch) => {
+                dispatch.type === "label" ? total += dispatch.cost : total += 0
+                return total;
+            }, 0);
         },
 
-        getLabelDispatchesCount(state) {
-            let paidDispatches = state.dispatches.map(dispatch => dispatch.type === "label");
-            return paidDispatches.length;
+        labelErrorTotalCost(state) {
+            return state.dispatches.reduce((total, dispatch) => {
+                dispatch.type === "errorLabel" ? total += dispatch.cost : total += 0
+                return total;
+            }, 0);
         },
 
-        getErrorPaidDispatchesCount(state) {
-            let paidDispatches = state.dispatches.map(dispatch => dispatch.type === "errorPaid");
-            return paidDispatches.length;
-        },
-
-        getErrorLabelDispatchesCount(state) {
-            let paidDispatches = state.dispatches.map(dispatch => dispatch.type === "errorLabel");
-            return paidDispatches.length;
+        paidErrorTotalCost(state) {
+            return state.dispatches.reduce((total, dispatch) => {
+                dispatch.type === "errorPaid" ? total += dispatch.cost : total += 0
+                return total;
+            }, 0);
         },
 
         // Returns series array contains an array for "errorPaid", "paid" and "errorLabel" types
-        getLineChartData(state) {
-            let errorSeries = state.dispatches.filter(dispatch => dispatch.cost > 0 && dispatch.type === "errorPaid");
-            let paidSeries = state.dispatches.filter(dispatch => dispatch.cost > 0 && dispatch.type === "paid");
-            let errorlabelSeries = state.dispatches.filter(dispatch => dispatch.cost > 0 && dispatch.type === "errorLabel");
-            let labelSeries = state.dispatches.filter(dispatch => dispatch.cost > 0 && dispatch.type === "label");
+        lineChartData(state) {
+            const labels = ["paid", "label", "errorLabel", "errorPaid"]
+            const series = [];
 
-            return [
-                [...errorSeries],
-                [...paidSeries],
-                [...labelSeries],
-                [...errorlabelSeries]
-            ];
+            for (let label of labels) {
+                const costs = state.dispatches.reduce((t, d) => {
+                    if (d.type === label) {
+                        t.push(d.cost);
+                    }
+                    return t;
+                }, []);
+
+                series.push(costs);
+            }
+
+            return {
+                labels: [],
+                series
+            };
         },
 
-        getPieChartData(state, getters) {
+        pieChartData(state) {
             let labels = [];
             let series = [];
 
@@ -73,7 +103,7 @@ export default new Vuex.Store({
                 }
             });
 
-            for (label of labels) {
+            for (let label of labels) {
                 let total = 0
 
                 state.dispatches.forEach((dispatch) => {
@@ -97,6 +127,11 @@ export default new Vuex.Store({
         fetchDispatches({ commit }) {
             commit('setDispatches', dispatches);
         },
+
+        // test(context) {
+        //     console.log(context.state.dispatches);
+        //     console.log(context.getters.dispatchesCount);
+        // }
     },
 
     // Mutations always update the state

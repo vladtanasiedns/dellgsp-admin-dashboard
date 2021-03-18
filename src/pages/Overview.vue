@@ -1,6 +1,7 @@
 <template>
   <div class="content">
     <div class="container-fluid">
+      <!-- Stats cards start -->
       <div class="row">
         <div class="col-xl-3 col-md-6">
           <stats-card>
@@ -54,10 +55,13 @@
           </stats-card>
         </div>
       </div>
+      <!-- Stats cards end -->
+
       <div class="row">
+        <!-- Line chart start -->
         <div class="col-md-8">
           <chart-card
-            :chart-data="lineChart.data"
+            :chart-data="this.lineChartData"
             :chart-options="lineChart.options"
             :responsive-options="lineChart.responsiveOptions"
           >
@@ -67,9 +71,10 @@
             </template>
             <template slot="footer">
               <div class="legend">
-                <i class="fa fa-circle text-info"></i> Open
-                <i class="fa fa-circle text-danger"></i> Click
-                <i class="fa fa-circle text-warning"></i> Click Second Time
+                <i class="fa fa-circle text-info"></i> Paid
+                <i class="fa fa-circle text-danger"></i> Label
+                <i class="fa fa-circle text-warning"></i> Error label
+                <i class="fa fa-circle" style="color: #9368e9"></i> Error paid
               </div>
               <hr />
               <div class="stats">
@@ -78,27 +83,30 @@
             </template>
           </chart-card>
         </div>
+        <!-- Line chart end -->
 
+        <!-- Pie Chart Start -->
         <div class="col-md-4">
-          <chart-card :chart-data="pieChart.data" chart-type="Pie">
+          <chart-card :chart-data="this.pieChartData" chart-type="Pie">
             <template slot="header">
               <h4 class="card-title">Email Statistics</h4>
               <p class="card-category">Last Campaign Performance</p>
             </template>
             <template slot="footer">
               <div class="legend">
-                <i class="fa fa-circle text-info"></i> Open
-                <i class="fa fa-circle text-danger"></i> Bounce
-                <i class="fa fa-circle text-warning"></i> Unsubscribe
-              </div>
-              <hr />
-              <div class="stats">
-                <i class="fa fa-clock-o"></i> Campaign sent 2 days ago
+                <i
+                  v-for="(label, index) in this.pieChartData.labels"
+                  :key="index"
+                >
+                  <b>{{ label }}</b> -
+                  {{ pieChartData.series[index] | roundTwoDecimals }}
+                </i>
               </div>
             </template>
           </chart-card>
         </div>
       </div>
+      <!-- Pie Chart end -->
 
       <!-- Disabled temporarely for screen cluttering -->
 
@@ -127,7 +135,7 @@
           </chart-card>
         </div> -->
 
-        <!-- <div class="col-md-6">
+      <!-- <div class="col-md-6">
           <card>
             <template slot="header">
               <h5 class="title">Tasks</h5>
@@ -167,7 +175,6 @@
             </div>
           </card>
         </div> -->
-      </div>
     </div>
   </div>
 </template>
@@ -175,7 +182,7 @@
 import ChartCard from "src/components/Cards/ChartCard.vue";
 import StatsCard from "src/components/Cards/StatsCard.vue";
 import LTable from "src/components/Table.vue";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -191,6 +198,28 @@ export default {
   },
   created() {
     this.fetchDispatches();
+    console.log(this.lineChartData);
+  },
+  computed: {
+    ...mapGetters({
+      getDispatches: "getDispatches",
+      dispatchesCount: "dispatchesCount",
+      paidDispatchesCount: "paidDispatchesCount",
+      labelDispatchesCount: "labelDispatchesCount",
+      errorPaidDispatchesCount: "errorPaidDispatchesCount",
+      errorLabelDispatchesCount: "errorLabelDispatchesCount",
+      lineChartData: "lineChartData",
+      pieChartData: "pieChartData",
+      paidTotalCost: "paidTotalCost",
+      labelTotalCost: "labelTotalCost",
+      labelErrorTotalCost: "labelErrorTotalCost",
+      paidErrorTotalCost: "paidErrorTotalCost",
+    }),
+  },
+  filters: {
+    roundTwoDecimals(number) {
+      return number.toFixed(2);
+    },
   },
   data() {
     return {
@@ -222,9 +251,9 @@ export default {
         },
         options: {
           low: 0,
-          high: 800,
+          high: 2500,
           showArea: false,
-          height: "245px",
+          height: "265px",
           axisX: {
             showGrid: false,
           },

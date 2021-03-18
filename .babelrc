@@ -5,7 +5,14 @@
       {
         "polyfills": [
           "es7.object.entries",
-          "es6.promise"
+          "es6.promise",
+          "es.symbol",
+          "es6.object.assign",
+          "es6.array.find",
+          "es6.array.iterator",
+          "es6.function.name",
+          "es7.object.values",
+          "web.dom.iterable"
         ],
         "useBuiltIns": "entry"
       }
