@@ -2,7 +2,7 @@
   <gmap-map
     id="map"
     :center="center"
-    :zoom="13"
+    :zoom="5"
     :options="options"
     map-type-id="terrain"
   >
@@ -22,8 +22,8 @@ export default {
   data() {
     return {
       center: {
-        lat: 40.748817,
-        lng: -73.985428,
+        lat: 37.0902,
+        lng: -95.7129,
       },
       options: {
         styles: [
