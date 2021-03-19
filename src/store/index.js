@@ -4,10 +4,6 @@ import { dispatches } from "../data/data";
 
 Vue.use(Vuex);
 
-const helperFunctions = {
-
-}
-
 export default new Vuex.Store({
     state: {
         dispatches: []
@@ -128,10 +124,9 @@ export default new Vuex.Store({
             commit('setDispatches', dispatches);
         },
 
-        // test(context) {
-        //     console.log(context.state.dispatches);
-        //     console.log(context.getters.dispatchesCount);
-        // }
+        test(context) {
+            console.log(context.state.dispatches)
+        }
     },
 
     // Mutations always update the state

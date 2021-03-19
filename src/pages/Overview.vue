@@ -6,11 +6,11 @@
         <div class="col-xl-3 col-md-6">
           <stats-card>
             <div slot="header" class="icon-warning">
-              <i class="nc-icon nc-chart text-warning"></i>
+              <i class="nc-icon nc-money-coins text-success"></i>
             </div>
             <div slot="content">
-              <p class="card-category">Capacity</p>
-              <h4 class="card-title">105GB</h4>
+              <p class="card-category">Paid</p>
+              <h4 class="card-title">${{ this.paidTotalCost }}</h4>
             </div>
             <div slot="footer"><i class="fa fa-refresh"></i>Updated now</div>
           </stats-card>
@@ -19,11 +19,11 @@
         <div class="col-xl-3 col-md-6">
           <stats-card>
             <div slot="header" class="icon-success">
-              <i class="nc-icon nc-light-3 text-success"></i>
+              <i class="nc-icon nc-paper-2 text-info"></i>
             </div>
             <div slot="content">
-              <p class="card-category">Revenue</p>
-              <h4 class="card-title">$1,345</h4>
+              <p class="card-category">Label</p>
+              <h4 class="card-title">${{ this.labelTotalCost }}</h4>
             </div>
             <div slot="footer"><i class="fa fa-calendar-o"></i>Last day</div>
           </stats-card>
@@ -32,11 +32,11 @@
         <div class="col-xl-3 col-md-6">
           <stats-card>
             <div slot="header" class="icon-danger">
-              <i class="nc-icon nc-vector text-danger"></i>
+              <i class="nc-icon nc-money-coins text-danger"></i>
             </div>
             <div slot="content">
-              <p class="card-category">Errors</p>
-              <h4 class="card-title">23</h4>
+              <p class="card-category">Paid Error</p>
+              <h4 class="card-title">${{ this.paidErrorTotalCost }}</h4>
             </div>
             <div slot="footer"><i class="fa fa-clock-o"></i>Last day</div>
           </stats-card>
@@ -45,11 +45,13 @@
         <div class="col-xl-3 col-md-6">
           <stats-card>
             <div slot="header" class="icon-info">
-              <i class="nc-icon nc-favourite-28 text-primary"></i>
+              <i class="nc-icon nc-paper-2 text-danger"></i>
             </div>
             <div slot="content">
-              <p class="card-category">Followers</p>
-              <h4 class="card-title">+45</h4>
+              <p class="card-category">Label Error</p>
+              <h4 class="card-title">
+                ${{ this.labelErrorTotalCost | roundTwoDecimals }}
+              </h4>
             </div>
             <div slot="footer"><i class="fa fa-refresh"></i>Updated now</div>
           </stats-card>
@@ -195,10 +197,6 @@ export default {
       test: "test",
       fetchDispatches: "fetchDispatches",
     }),
-  },
-  created() {
-    this.fetchDispatches();
-    console.log(this.lineChartData);
   },
   computed: {
     ...mapGetters({
