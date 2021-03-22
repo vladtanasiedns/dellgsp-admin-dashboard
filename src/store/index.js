@@ -115,6 +115,18 @@ export default new Vuex.Store({
                 labels,
                 series
             }
+        },
+
+        mapData(state) {
+            return state.dispatches.map((dispatch) => {
+                return {
+                    type: dispatch.type,
+                    address: dispatch.address,
+                    lat: dispatch.lat,
+                    lon: dispatch.lon,
+                    cost: dispatch.cost
+                }
+            })
         }
     },
 
@@ -124,8 +136,24 @@ export default new Vuex.Store({
             commit('setDispatches', dispatches);
         },
 
-        test(context) {
-            console.log(context.state.dispatches)
+        fetchDispatchCoordinates({ commit, state }) {
+            //https://nominatim.openstreetmap.org/search?postalcode=86351&format=json
+            state.dispatches.forEach((d, i) => {
+                const address = d.address.split(",");
+                const zip = address[address.length - 1];
+                const result = {};
+                fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${zip}&sensor=true&key=${process.env.VUE_APP_GOOGLE_MAPS_KEY}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const location = data.results[0].geometry.location;
+                        const payload = { lat: location.lat, lon: location.lng, index: i }
+                        commit('addCoordsToDispatch', payload)
+                    });
+            });
+        },
+
+        test({ state }) {
+            console.log(state.dispatches);
         }
     },
 
@@ -133,6 +161,20 @@ export default new Vuex.Store({
     mutations: {
         setDispatches(state, dispatches) {
             state.dispatches = dispatches;
+        },
+
+        addCoordsToDispatch(state, payload) {
+            const { lat, lon, index } = payload;
+
+            state.dispatches.forEach((d, i) => {
+                // find object by index
+                if (index == i) {
+
+                    // update object to contain coordinates
+                    state.dispatches[i].lat = lat;
+                    state.dispatches[i].lon = lon;
+                }
+            });
         }
     }
 

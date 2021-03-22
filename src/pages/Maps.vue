@@ -6,7 +6,7 @@
     :options="options"
     map-type-id="terrain"
   >
-    <gmap-marker :position="center"> </gmap-marker>
+    <gmap-marker :position="center"></gmap-marker>
   </gmap-map>
 </template>
 <script>

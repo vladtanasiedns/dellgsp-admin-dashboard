@@ -12,11 +12,13 @@ export default {
   methods: {
     ...mapActions({
       fetchDispatches: "fetchDispatches",
+      fetchDispatchCoordinates: "fetchDispatchCoordinates",
       test: "test",
     }),
   },
   created() {
     this.fetchDispatches();
+    this.fetchDispatchCoordinates();
   },
 };
 </script>
