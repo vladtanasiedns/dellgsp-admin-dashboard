@@ -122,8 +122,7 @@ export default new Vuex.Store({
                 return {
                     type: dispatch.type,
                     address: dispatch.address,
-                    lat: dispatch.lat,
-                    lon: dispatch.lon,
+                    coords: dispatch.coords,
                     cost: dispatch.cost
                 }
             })
@@ -141,12 +140,11 @@ export default new Vuex.Store({
             state.dispatches.forEach((d, i) => {
                 const address = d.address.split(",");
                 const zip = address[address.length - 1];
-                const result = {};
                 fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${zip}&sensor=true&key=${process.env.VUE_APP_GOOGLE_MAPS_KEY}`)
                     .then(response => response.json())
                     .then(data => {
                         const location = data.results[0].geometry.location;
-                        const payload = { lat: location.lat, lon: location.lng, index: i }
+                        const payload = { lat: location.lat, lng: location.lng, index: i }
                         commit('addCoordsToDispatch', payload)
                     });
             });
@@ -164,15 +162,13 @@ export default new Vuex.Store({
         },
 
         addCoordsToDispatch(state, payload) {
-            const { lat, lon, index } = payload;
+            const { lat, lng, index } = payload;
 
             state.dispatches.forEach((d, i) => {
                 // find object by index
                 if (index == i) {
-
                     // update object to contain coordinates
-                    state.dispatches[i].lat = lat;
-                    state.dispatches[i].lon = lon;
+                    state.dispatches[i].coords = { lat, lng };
                 }
             });
         }
