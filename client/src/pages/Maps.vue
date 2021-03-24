@@ -1,16 +1,9 @@
 <template>
-  <gmap-map
-    id="map"
-    :center="center"
-    :zoom="5"
-    map-type-id="terrain"
-    :options="options"
-  >
+  <gmap-map id="map" :center="center" :zoom="5" map-type-id="terrain">
     <gmap-marker
       v-for="(marker, index) in markers"
       :key="index"
       :position="getPosition(marker.coords)"
-      :icon="mapMarkers(marker.type)"
     >
     </gmap-marker>
   </gmap-map>
