@@ -15,8 +15,15 @@
                 size: { width: 60, height: 60, f: 'px', b: 'px' },
                 scaledSize: { width: 60, height: 60, f: 'px', b: 'px' },
               }"
+              @click="showInfoWindow(marker)"
             >
             </gmap-marker>
+            <gmap-info-window :position="infoWindowPos" :opened="infoWinOpen">
+              <p @click="infoWinOpen = false" class="closeInfo">X</p>
+              <p>{{ infoContent.type }}</p>
+              <p>{{ infoContent.name }}</p>
+              <p>{{ infoContent.cost }}</p>
+            </gmap-info-window>
           </gmap-map>
         </div>
       </div>
@@ -68,6 +75,9 @@ export default {
 
   data() {
     return {
+      infoWinOpen: false,
+      infoContent: "",
+      infoWindowPos: { lat: 0, lng: 0 },
       center: {
         lat: 39.4296413,
         lng: -84.5117321,
@@ -94,7 +104,7 @@ export default {
     }),
   },
 
-  mounted() {
+  created() {
     this.fetchDispatchCoordinates;
     this.test;
     this.markDispatches();
@@ -137,11 +147,38 @@ export default {
 
       return labels[type];
     },
+
+    showInfoWindow(marker) {
+      this.infoWindowPos = {
+        lat: marker.coords.lat,
+        lng: marker.coords.lng,
+      };
+      this.infoWinOpen = true;
+      this.infoContent = {
+        type: marker.type,
+        name: marker.name,
+        address: marker.address,
+        company: marker.company,
+        cost: marker.cost,
+        phone: marker.phone,
+      };
+    },
   },
 };
 </script>
 <style>
 #map {
   min-height: calc(100vh - 123px);
+}
+
+.gm-ui-hover-effect {
+  display: none !important;
+}
+
+.closeInfo {
+  background-color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
 }
 </style>
