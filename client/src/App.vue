@@ -19,6 +19,7 @@ export default {
   created() {
     this.fetchDispatches();
     this.fetchDispatchCoordinates();
+    this.test();
   },
 };
 </script>

@@ -132,11 +132,12 @@ export default new Vuex.Store({
     // Actions decide when mutations run and run them
     actions: {
         fetchDispatches({ commit }) {
-            commit('setDispatches', dispatches);
+            const URL = "http://localhost:5000/";
+            fetch(URL, { mode: 'cors' }).then(response => response.json()).then(data => commit('setDispatches', data));
+
         },
 
         fetchDispatchCoordinates({ commit, state }) {
-            //https://nominatim.openstreetmap.org/search?postalcode=86351&format=json
             state.dispatches.forEach((d, i) => {
                 const address = d.address.split(",");
                 const zip = address[address.length - 1];
