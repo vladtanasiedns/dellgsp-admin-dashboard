@@ -133,8 +133,9 @@ export default new Vuex.Store({
     actions: {
         fetchDispatches({ commit }) {
             const URL = "http://localhost:5000/";
-            fetch(URL, { mode: 'cors' }).then(response => response.json()).then(data => commit('setDispatches', data));
-
+            fetch(URL, { mode: 'cors' }).then(response => response.json()).then(data => {
+                commit('setDispatches', data)
+            });
         },
 
         fetchDispatchCoordinates({ commit, state }) {

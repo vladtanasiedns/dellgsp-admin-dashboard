@@ -13,12 +13,12 @@ export default {
     ...mapActions({
       fetchDispatches: "fetchDispatches",
       fetchDispatchCoordinates: "fetchDispatchCoordinates",
+      fetchCoordinatesFromNominatim: "fetchCoordinatesFromNominatim",
       test: "test",
     }),
   },
   created() {
     this.fetchDispatches();
-    this.fetchDispatchCoordinates();
     this.test();
   },
 };
